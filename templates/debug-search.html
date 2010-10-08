@@ -1,0 +1,53 @@
+{% extends "debug-base.html" %}
+{% block title %}Custom Query{% endblock title %}
+{% block body %}
+		<h1>Search Playground</h1>
+		<h2>Extended Search For</h2>
+		<div>
+			<form action="/search-query" id="search_form">
+				<p><input type="text" id="search-text" name="search-text" value="{{ keyword }}"></p>
+				
+				<h4><input name="where" type="radio" value="at-site" id="radio-at-site"><label for="radio-at-site">на сайте</label></h4>
+				<h4><input name="where" type="radio" value="at-map" id="radio-at-map"><label for="radio-at-map">на схеме</label></h4>
+				<h4><input name="where" type="radio" value="in-ecat" id="radio-in-ecat"><label for="radio-in-ecat">в каталоге</label></h4>
+				<ul>
+					<li>
+						<h5><input name="who" type="radio" value="human" id="radio-human"><label for="radio-human">Человек</label></h5>
+							<h6>Что</h6>
+							<ul>
+								<li>[x] книги</li>
+								<li>[x] диссертации</li>
+								<li>[x] методички</li>
+								<li>[x] другое</li>
+							</ul>
+							<h6>Как</h6>
+							<ul>
+								<li>[x] по заголовку</li>
+								<li>[x] автору</li>
+								<li>[x] описанию</li>
+								<li>[x] ISBN</li>
+								<li>[x] изданы [1986]--&lt;ползунок левый&gt;======&lt;ползунок правый&gt;--------[наши дни]</li>
+							</ul>
+					</li>
+					<li>
+						<h5><input name="who" type="radio" value="eggman" id="radio-eggman"><label for="radio-eggman">Яйцеголовый (вместо полей настроек используется язык запросов: адаптированный cql или ccl)</label></h5>
+							<p>Предполагается применить простейший синтаксиси (И, ИЛИ, НЕ) и самые распространённые поля (Заголовок, Автор, Описание, ISBN, номер методички и поклассы: методички, диссертации, книги, и т.п.)</p>
+							<p>Например: type=книга author=ким описание=теория</p>
+							<p><input name="type" type="radio" {% ifequal type_ 'CCL' %}checked="checked"{% endifequal %}{% ifequal type_ 'ccl' %}checked="checked"{% endifequal %} value="CCL" id="radio_ccl"><label for="radio_ccl">CCL</label> <sup><a href="https://www.reorient.org.uk/content/page/cclhelp">примеры</a> <a href="http://koha.org/documentation/manual/3.0/searching/guide-to-searching/common-command-language-searching" class="help">?</a></sup><br>
+							<input name="type" type="radio" {% if not type_ %}checked="checked"{% endif %}{% ifequal type_ 'CQL' %}checked="checked"{% endifequal %} value="CQL" id="radio_cql"><label for="radio_cql">CQL</label> <sup><samp>bib1.Any = "1579"</samp> <a href="http://www.loc.gov/z3950/agency/bib1.html" class="help">?</a></sup><br>
+							<input name="type" type="radio" {% ifequal type_ 'PQF' %}checked="checked"{% endifequal %} value="PQF" id="radio_pqf"><label for="radio_pqf">PQF</label> <sup><samp>@attr 1=12 "41187"</samp> <a href="http://www.loc.gov/z3950/agency/bib1.html" class="help">?</a></sup></p>
+							<p><textarea name="query" rows="10" cols="62">{{query_}}</textarea></p>
+					</li>
+				</ul>
+				<p><input type="submit" id="search-button" value="Найти"></p>
+			</form>
+		</div>
+		
+		<h2>Result</h2>
+		<p><span class="par-name">Length</span> {{b_len}}</p>
+		<ol>
+			{% for book in books %}<li>
+		      {% include "index-card.html" %}
+			</li>{% endfor %}
+		</ol>
+{% endblock body %}

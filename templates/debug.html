@@ -1,0 +1,21 @@
+{% extends "debug-base.html" %}
+{% block title %}{{syntax}} {{query}}{% endblock title %}
+{% block body %}
+    <h1>Query Output Debug</h1>
+    <h2>Parameters</h2>
+    <p><span class="par-name"><span class="s-addr">Server Address</span>:<span class="s-port">Port</span></span> <span class="s-addr">{{server_address}}</span>:<span class="s-port">{{server_port}}</span></p>
+    <p><span class="par-name">Database</span> <span class="db-name">{{db_name}}</span></p>
+    <p><span class="par-name">Query Type</span> <span class="q-type">{{q_type}}</span> <sup><a href="http://www.loc.gov/z3950/agency/bib1.html" class="help">?</a></sup></p>
+    <p><span class="par-name">Query</span> {{query}} <sup><a href="http://10.0.86.216/trac/wiki/LibMireaSpecSearch#СоответствиеточекмонтированияТМиполейRUSMARC">индексные поля</a></sup></p>
+    <p><span class="par-name">Syntax</span> {{syntax}} <sup><a href="http://10.0.86.216/trac/wiki/LibMireaSpecSearch#Форматызаписейподдерживаемыеpyzом">другие форматы</a></sup></p>
+    <h2>Result</h2>
+    <p><span class="par-name">Length</span> {{res_len}}</p>
+    <h3>Raw Data</h3>
+    <code>{{raw_data}}</code>
+    <h3>Parsed Raw Data</h3>
+    <pre>{{praw_data}}</pre>
+    <h3>Fields Array</h3>
+    <code>{{fields_array}}</code>
+    <h3>XML Data</h3>
+    <pre>{{xml_data}}</pre>
+{% endblock body %}

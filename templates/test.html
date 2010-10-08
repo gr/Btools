@@ -1,0 +1,13 @@
+hello world
+<form action="/query/" method="post">
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+{% if form.subject.errors %}
+    <ol>
+    {% for error in form.subject.errors %}
+        <li><strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    </ol>
+{% endif %}
+

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{% block title %}libmirea debug page{% endblock title %}</title>
+    <link rel="icon" href="/media/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/media/img/favicon.ico" type="image/x-icon"> 
+    <!--link href="/media/css/debug.css" type="text/css" rel="stylesheet"-->
+    <style type="text/css">
+    body {
+      background-color: #fff;
+      /*border-top: solid .5em #c30;*/
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.4em;
+      margin: 0;
+      padding: 0 3.8em .2em 3.8em;
+    }
+
+    hr {
+      background-color: #111;
+      border: 0;
+      border-collapse: collapse;
+      border-top: dashed .5em #fc0;
+      margin: 0 -3.8em 0 -3.8em;
+      padding: 0;
+      height: 0;
+    }
+
+    code {
+      display: block;
+    }
+
+    pre, code {
+      background-color: #ffd;
+      font-family: Monaco, "Courier New", Courier, monospace;
+      font-size: 13px;
+      margin: auto -1em;
+      padding: .5em 1em;
+      overflow: auto;
+    }
+
+    samp {
+      font-family: Monaco, "Courier New", Courier, monospace;
+      font-size: .8125em;
+    }
+
+    textarea {
+      font-family: Monaco, "Courier New", Courier, monospace;
+      font-size: 12px;
+    }
+
+    ol {
+      background-color: #ffd;
+      margin: auto -3em;
+      padding: .1em 3em .5em 3em;
+    }
+
+    ol li {
+      margin-top: 1em;
+      margin-left: 0;
+      margin-bottom: 2em;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: .875em;
+    }
+
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 0;
+    }
+
+    h3 {
+      color: #999;
+      margin-top: 1.6em;
+      margin-bottom: 0;
+    }
+
+    span.par-name {
+      color: #999;
+    }
+
+    span.db-name {
+      text-transform: capitalize;
+    }
+
+    span.q-type {
+      text-transform: uppercase;
+    }
+
+    span.s-port {
+      margin-left: .2em;
+    }
+
+    span.s-addr {
+      margin-right: .1em;
+    }
+
+    sup {
+      font-size: .6875em;
+      line-height: 1ex;
+    }
+
+    p.date {
+      text-transform: lowercase;
+    }
+
+    a {
+      color: #039;
+    }
+
+    a:visited {
+      color: #606;
+    }
+
+    a:hover {
+      color: #c30;
+    }
+
+    a.help {
+      background-color: #36c;
+      color: #fff;
+      padding-top: 1px;
+      padding-right: 3px;
+      padding-left: 2px;
+      text-decoration: none;
+    }
+
+    a.help:visited {
+      background-color: #969;
+    }
+
+    a.help:hover {
+      background-color: #c30;
+    }
+    </style>
+  </head>
+	
+  <body>
+    <hr>
+	{% block body %}<h1>Blank Debug Page</h1>
+	{% endblock body %}
+    <p class="date">{% now "j F Y года, H:i:s" %}</p>
+  </body>
+</html>
