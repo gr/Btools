@@ -3,17 +3,8 @@
 {% block body %}
 		<h1>Custom Query Debug</h1>
 		<h2>Query</h2>
-		<form action="/query">
-			<p><label for="db_name">Database </label><select name="db_name">
-				<option value="books" {% ifequal db_name 'books' %}selected="selected"{% endifequal %}>Books</option>
-				<option value="ebooks" {% ifequal db_name 'ebooks' %}selected="selected"{% endifequal %}>Ebooks</option>
-				<option value="share" {% ifequal db_name 'share' %}selected="selected"{% endifequal %}>Share</option>
-			</select></p>
-			<p>
-				<input name="type" type="radio" {% ifequal type_ 'CCL' %}checked="checked"{% endifequal %}{% ifequal type_ 'ccl' %}checked="checked"{% endifequal %} value="CCL" id="radio_ccl"><label for="radio_ccl">CCL</label> <sup><a href="https://www.reorient.org.uk/content/page/cclhelp">примеры</a> <a href="http://koha.org/documentation/manual/3.0/searching/guide-to-searching/common-command-language-searching" class="help">?</a></sup><br>
-				<input name="type" type="radio" {% if not type_ %}checked="checked"{% endif %}{% ifequal type_ 'CQL' %}checked="checked"{% endifequal %} value="CQL" id="radio_cql"><label for="radio_cql">CQL</label> <sup><samp>bib1.Any = "1579"</samp> <a href="http://www.loc.gov/z3950/agency/bib1.html" class="help">?</a></sup><br>
-				<input name="type" type="radio" {% ifequal type_ 'PQF' %}checked="checked"{% endifequal %} value="PQF" id="radio_pqf"><label for="radio_pqf">PQF</label> <sup><samp>@attr 1=12 "41187"</samp> <a href="http://www.loc.gov/z3950/agency/bib1.html" class="help">?</a></sup></p>
-			<p><textarea name="query" rows="10" cols="62">{{query_}}</textarea></p>
+		<form action="/query/" method="post">
+			{{ form.as_p }}
 			<p><input type="submit" value="Выполнить"></p>
 		</form>
 		

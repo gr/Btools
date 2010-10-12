@@ -4,9 +4,10 @@ from django.db.models import *
 class BookDB(Model):
     name = CharField(u'Название', max_length=50)
     host = CharField(u'Хост', max_length=50)
-    port = CharField(u'Порт', max_length=50)
+    port = IntegerField(u'Порт', default=210)
     db = CharField(u'База данных', max_length=50)
     encoding = CharField(u'Кодировка', max_length=50)
+    url = CharField(u'url', max_length=50)
     about = TextField(u'Описание базы данных', blank=True)
     
     def __unicode__(self):

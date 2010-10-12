@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+
+{% block head %}{{ block.super }}{% endblock head %}
+{% block bodyid %} id="page"{% endblock bodyid %}
+{% block bodyclass %}{% endblock bodyclass %}
+
+{% block menu %}{{ block.super }}{% endblock menu %}
+
+{# <!-- Поисковая форма --> #}
+{% block search %}
+	{{ block.super }}
+{% endblock search %}
+
+{# <!-- Содержимое --> #}
+{% block content %}	
+	{% if menu %}<div id="menu_right">
+		<ul>{% for i in menu %}
+			{% ifnotequal i item %}<li><a href="/{{ i.type.name }}/{{ i.id }}">{{ i.typograf_title }}</a></li>{% endifnotequal %}{% ifequal i item %}<li class="selected">{{i.typograf_title}}</li>{% endifequal %}{% endfor %}
+		</ul>
+	</div>{% endif %}
+{% endblock content %}

@@ -1,0 +1,13 @@
+{% extends "pages.html" %}
+	{% block head %}{{ block.super }}{% endblock head %}
+	{% block title %}{{ book.f200__a }}{% if book.f200__e %}: {{ book.f200__e }}{% endif %}{% if book.f200__e__2 %}: {{ book.f200__e__2 }}{% endif %}{% if book.f200__h or book.f461__200v %}. {{ book.f200__h }}{{ book.f461__200v }}{% endif %}{% endblock title %}
+	{% block menu %}{{ block.super }}{% endblock menu %}
+	{% block search %}{{ block.super }}{% endblock search %}
+	{% block content %}
+	<div id="content" class="item content-item record">
+		<h2 class="sauce_header item">Карточка издания</h2>
+		<h2 class="request">Читательское требование</h2>{% include "index-card.html" %}{% for stores in book.store %}
+		<p class="store">{% for store in stores %}<span class="{% cycle 'name' 'count' %}">{% ifequal store 'Абонемент' %}на <a class="lending-lib" href="/Схема/103">абонементе</a>{% else %}{% ifequal store 'Читальный зал' %}в <a class="reading-room" href="/Схема/212">читальном зале</a>{% else %}{{store}}{% endifequal %}{% endifequal %}{% cycle ' ' '' %}</span>{% endfor %}</p>{% endfor %}
+		{% if book.f300__a %}<p class="about-record">{{ book.f300__a }}</p>{% endif %}
+		{#% ifequal book.type 'ebook' %#}{% if book.f856__u %}<p class="download"><a href="{{ book.f856__u }}">Читать…</a></p>{% endif %}{#% endifequal %#}
+	</div>{% endblock %}
