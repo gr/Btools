@@ -14,7 +14,7 @@ class Output:
     fields=[]
     _null=1
 
-    def constructor(self, fields, encoding):
+    def __init__(self, fields = None, encoding = ''):
         self.encoding = encoding
         self.fields = fields
 
@@ -145,12 +145,6 @@ class Output:
     def link(self):
         return self.f856__u
 
-    def type(self):
-        return self.fields['database']
-        
-    def db(self):
-        return self.fields['database']
-
 class ZClient:
     connection = 0
     response = []
@@ -176,48 +170,16 @@ class ZClient:
         if len(self.response) < start: 
             start=0
         if len(self.response) < start+length:
-            length = len(self.response)   
+            length = len(self.response)
         for i in xrange(start, start+length):
-            record = zmarc.MARC(MARC=self.response[i].data)
-            p_record = Output()
-            if self.connection.databaseName[-1:] == 's':
-                record.fields['database'] = self.connection.databaseName[:-1]
-            else:
-                record.fields['database'] = self.connection.databaseName
-#            record.fields['database'] = self.connection.databaseName[:-1]
-            p_record.constructor(record.fields, self.encoding)
-            res.append(p_record)
+            record = zmarc.MARC(MARC=self.response[i].data, strict = 0)
+            res.append(Output(record.fields, self.encoding))
         return res, len(self.response)
 
     def get_book(self, book_id):
-        query = '@attr 1=12 "'+str(int(book_id))+'"'
+        query = '@attr 1=12 "'+book_id+'"'
         return self.query('pqf',query)[0]
 
     def get_books(self, keyword, start=0, length=10):
         query = '@or @attr 1=7 "'+keyword+'"@attr 3=3 @attr 1=1035 "'+keyword+'"'
         return self.query('pqf',query, start, length)
-
-    def serialize(self, file_name, books):
-        fo = open(file_name, "wb")
-        books.reverse()
-        try:
-            for book in books:
-                if book.f010__a and book.f999__b != u'Худ фонд':
-                    cPickle.dump(book.fields, fo)
-            fo.close()
-        except:
-            return 0
-        return 1
-        
-    def unserialize(self, file_name):
-        last_books = []
-        fo = open(file_name, "rb")
-        try:
-            while 1:
-                p_record = Output()
-                p_record.constructor(cPickle.load(fo), self.encoding)
-                last_books.append(p_record)
-        except:
-            pass
-        fo.close()
-        return last_books

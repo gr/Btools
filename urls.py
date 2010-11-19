@@ -15,6 +15,6 @@ urlpatterns = patterns('',
 
 if regexp:
     urlpatterns += patterns('',
-    (r'^(?P<db_url>('+regexp+'))/(?P<id>\d+)/*$', views.get_book, {'tpl':'record.html'}),
-    (r'^(?P<debug>(debug/)+)(?P<db_url>('+regexp+'))/(?P<id>\d+)/*$', views.get_book, {'tpl':'debug.html'}),
+    (r'^(?P<debug>(debug/)+)(?P<db_url>('+regexp+'))/(?P<id>[\w\d\\\\]+)/*$', views.get_book, {'tpl':'debug.html'}),
+    (r'^tpl/(?P<tpl>[\w\s]+)', views.render_template)
 )
