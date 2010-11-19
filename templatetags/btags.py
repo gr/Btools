@@ -13,7 +13,7 @@ def book_render(db_url, book_id):
     book = search.get_book(book_id)
     if book:
         book = book[0]
-    return {'book': book}
+    return {'book': book, 'db': db_url}
 
 
 @register.inclusion_tag('tags/bookset.html')
