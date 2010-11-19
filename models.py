@@ -26,7 +26,7 @@ class BooksField(TextField):
             return base64.encodestring(pickle.dumps(pickling_books, 2))
         
     def to_python(self, value):
-        if not isinstance(value, basestring):
+        if not isinstance(value, basestring) or value in ( False, None, '' ):
             return value 
         books_fields = pickle.loads(base64.decodestring(value))
         return [ Output( book_fields, 'utf-8') for book_fields in books_fields ]
