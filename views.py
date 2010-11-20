@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from forms import QueryForm
 from models import BookDB, BookSet
 from ZClient import ZClient
@@ -28,7 +28,7 @@ def query(request, **kwargs):
 
 
 def get_book(request, **kwargs):
-    db = BookDB.objects.get(url=kwargs['db_url'])
+    db = get_object_or_404(BookDB, url = kwargs['db_url'])
     if kwargs.has_key('debug'):
         server_address = db.host
         server_port = db.port
