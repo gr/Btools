@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models import *
-from choice import QUERY_TYPE_CHOICES, SYNTAX_CHOICES
+from choice import QUERY_TYPE_CHOICE, SYNTAX_CHOICE
 from ZClient import ZClient, Output
 import base64
 
@@ -37,7 +37,7 @@ class BookDB(Model):
     host = CharField(u'Хост', max_length=50)
     port = IntegerField(u'Порт', default=210)
     db = CharField(u'База данных', max_length=50)
-    syntax = CharField(u'Синтаксис', max_length=50, choices=SYNTAX_CHOICES)
+    syntax = CharField(u'Синтаксис', max_length=50, choices=SYNTAX_CHOICE)
     encoding = CharField(u'Кодировка', max_length=50)
     url = CharField(u'url', max_length=50)
     about = TextField(u'Описание базы данных', blank=True)
@@ -62,7 +62,7 @@ class BookDB(Model):
 class BookSet(Model):
     name = CharField(u'Название', max_length=50)
     db = ForeignKey(BookDB)
-    query_type = CharField(u'Тип запроса', max_length=50, choices=QUERY_TYPE_CHOICES)
+    query_type = CharField(u'Тип запроса', max_length=50, choices=QUERY_TYPE_CHOICE)
     query = TextField(u'Запрос', blank=True)
     time = TimeField(u'Обновляется каждый день, в')
     number_of_books = IntegerField(u'Количество книг', editable=False, null=True)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-QUERY_TYPE_CHOICES = (('CCL', 'CCL'), 
+QUERY_TYPE_CHOICE = (('CCL', 'CCL'), 
                       ('S-CCL','S-CCL'), 
                       ('CQL','CQL'), 
                       ('S-CQL','S-CQL'), 
@@ -8,7 +8,7 @@ QUERY_TYPE_CHOICES = (('CCL', 'CCL'),
                       ('ZSQL','ZSQL'), 
                       ('CQL-TREE','CQL-TREE'))
                                             
-SYNTAX_CHOICES = (('RUSMARC', 'RUSMARC'), 
+SYNTAX_CHOICE = (('RUSMARC', 'RUSMARC'), 
                   ('USMARC', 'USMARC'), 
                   ('USMARCnonstrict', 'USMARCnonstrict'), 
                   ('UKMARC', 'UKMARC'), 
