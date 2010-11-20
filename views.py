@@ -4,7 +4,6 @@ from forms import QueryForm
 from models import BookDB, BookSet
 from ZClient import ZClient
 from PyZ3950 import zoom, zmarc
-from django.http import Http404
 
 def render_template(request, **kwargs):
     if kwargs['tpl']:
@@ -12,7 +11,7 @@ def render_template(request, **kwargs):
 
 
 def query(request, **kwargs):
-    if request.method == 'GET' :
+    if request.method == 'GET' and len(request.GET) > 0:
         form = QueryForm(request.GET)
         if form.is_valid(): 
             search = ZClient()
