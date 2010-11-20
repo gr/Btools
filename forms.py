@@ -7,10 +7,10 @@ class QueryForm(forms.Form):
     db = forms.ModelChoiceField(queryset=BookDB.objects.all(), empty_label=None, 
         error_messages={'required':'Select Database', 
                         'invalid_choice':'We know nothing about this Database'})
-    query_type = forms.ChoiceField(choices=QUERY_TYPE_CHOICES, 
+    query_type = forms.ChoiceField(choices=QUERY_TYPE_CHOICE, 
         error_messages={'required': 'Select Query Type', 
                         'invalid_choice': 'We know nothing about this Query Type'})
-    syntax = forms.ChoiceField(choices=SYNTAX_CHOICES, 
+    syntax = forms.ChoiceField(choices=SYNTAX_CHOICE, 
         error_messages={'required':'Select Syntax', 
                         'max_length':'Max length is 250 symbols'})
     query = forms.CharField(max_length=250, widget=forms.widgets.Textarea(attrs={'rows':'10', 'cols':'62'}),
