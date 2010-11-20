@@ -17,11 +17,16 @@ def book_render(db_url, book_id):
 
 
 @register.inclusion_tag('tags/bookset.html')
-def bookset_render(bookset_name): #name, type, len, pagination, from begin/end
+def bookset_render(bookset_name, render_type, length): #name, type, len, pagination, from begin/end
     """
     Render bookset
     """
-    bookset = BookSet.objects.get(name=bookset_name)
+    bookset = BookSet.objects.get(name = bookset_name)
+    try:
+        length = int(length)
+        bookset.books = bookset.books[:length]
+    except:
+        pass
     return {'bookset': bookset}
     
 
