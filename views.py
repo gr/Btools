@@ -7,9 +7,6 @@ from PyZ3950 import zoom, zmarc
 from django.http import Http404
 
 def render_template(request, **kwargs):
-    tbookset = BookSet.objects.all()[2]
-    tbooks = tbookset.books
-    tbook = tbooks[0]
     if kwargs['tpl']:
         return render_to_response(kwargs['tpl']+'.html', locals())
 
