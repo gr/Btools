@@ -23,7 +23,6 @@ def query(request, **kwargs):
                            form.cleaned_data['syntax'],
                            form.cleaned_data['charset'])
             books, b_len = search.query(form.cleaned_data['query_type'], form.cleaned_data['query'], 1000)
-            book = books[0]
     else:
         form = QueryForm()
     return render_to_response(kwargs['tpl'], locals())

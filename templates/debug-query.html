@@ -10,14 +10,10 @@
 		</form>
 		
 		<h2>Result</h2>
-		{% if book.id %}
-		{% book_render db.url book.id %}
-		{% endif %}
-		
 		<p><span class="par-name">Length</span> {{b_len}}</p>
 		<ol>
 			{% for book in books %}<li>
-		      {% include "index-card.html" %}
+		      {% book_render db.url book.id %}
 			</li>{% endfor %}
 		</ol>
 
@@ -27,3 +23,11 @@
 {% endfor %}
 		</pre>
 {% endblock body %}
+
+{% comment %} 
+переменные доступные в данном шаблоне
+    form
+    books
+    b_len
+    db
+{% endcomment %}

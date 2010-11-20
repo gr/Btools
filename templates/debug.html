@@ -19,3 +19,23 @@
     <h3>XML Data</h3>
     <pre>{{xml_data}}</pre>
 {% endblock body %}
+
+
+
+{% comment %} 
+переменные доступные в данном шаблоне
+        db = BookDB.objects.get(url=kwargs['db_url'])
+        server_address = db.host
+        server_port = db.port
+        db_name = db.db
+        syntax = 'RUSMARC'
+        q_type = 'pqf'
+        query = '@attr 1=1035 "' + kwargs['id'].encode('utf-8', 'backslashreplace') + '"'
+        conn = zoom.Connection (server_address, server_port, databaseName=db_name, preferredRecordSyntax=syntax)
+        res = conn.search(zoom.Query (q_type, query))
+        res_len = len(res)
+        raw_data = str(res[0].data).decode(db.encoding)
+        praw_data = str(zmarc.MARC(res[0].data, strict = 0)).decode(db.encoding)
+        fields_array = str(zmarc.MARC(MARC=res[0].data, strict = 0).fields).decode(db.encoding)
+        xml_data = str(zmarc.MARC(MARC=res[0].data, strict = 0).toMARCXML()).decode(db.encoding)
+{% endcomment %}
