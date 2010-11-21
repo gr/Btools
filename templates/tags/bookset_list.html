@@ -1,3 +1,6 @@
+{% extends "debug-base.html" %}
+{% block title %}---{% endblock title %}
+{% block body %}
 {% load btags %}
 
 {% for bookset in booksets %}
@@ -7,7 +10,7 @@
 {% endfor %}
 
 
-
+{% endblock body %}
 {% comment %}
 
 рендер списка буксетов
