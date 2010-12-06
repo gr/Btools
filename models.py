@@ -24,6 +24,21 @@ class BooksField(TextField):
         else:
             pickling_books = [ x.fields for x in value ]
             return base64.encodestring(pickle.dumps(pickling_books, 2))
+    
+    def value_to_string(self, model_instance):
+        value = getattr(model_instance, self.attname, None)
+        if value in ( False, None, '' ):
+            return value
+        else:
+            pickling_books = [ x.fields for x in value ]
+            return base64.encodestring(pickle.dumps(pickling_books, 2))
+
+    def get_prep_value(self, value):
+        if value in ( False, None, '' ):
+            return value
+        else:
+            pickling_books = [ x.fields for x in value ]
+            return base64.encodestring(pickle.dumps(pickling_books, 2))
         
     def to_python(self, value):
         if not isinstance(value, basestring) or value in ( False, None, '' ):

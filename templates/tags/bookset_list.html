@@ -7,6 +7,10 @@
 
     {{ bookset.name }} - {{ bookset.number_of_books }} книг <br>
     
+    {% for book in bookset.books %}
+        {% book_render bookset.db.url book.id %}
+    {% endfor %}
+    
 {% endfor %}
 
 
