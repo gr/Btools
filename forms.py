@@ -4,7 +4,10 @@ from models import BookDB
 from choice import QUERY_TYPE_CHOICE, SYNTAX_CHOICE
 
 class QueryForm(forms.Form):
-    db = forms.ModelChoiceField(queryset=BookDB.objects.all(), empty_label=None, 
+    db = forms.ModelChoiceField(
+        queryset=BookDB.objects.all(),
+        empty_label=None,
+        widget=forms.Select(attrs={'class':'dbSelect'}), 
         error_messages={'required':'Select Database', 
                         'invalid_choice':'We know nothing about this Database'})
     query_type = forms.ChoiceField(choices=QUERY_TYPE_CHOICE, 
