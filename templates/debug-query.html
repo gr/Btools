@@ -4,7 +4,7 @@
 {% load btags %}
 		<h1>Custom Query Debug</h1>
 		<h2>Query</h2>
-		<form action="/query/" method="get">
+		<form action="./" method="get">
 			{{ form.as_p }}
 			<p><input type="submit" value="Выполнить"></p>
 		</form>
@@ -13,7 +13,7 @@
 		<p><span class="par-name">Length</span> {{b_len}}</p>
 		<ol>
 			{% for book in books %}<li>
-		      {% book_render db.url book.id %}
+		      {% book_render db.url book '/debug' %}
 			</li>{% endfor %}
 		</ol>
 

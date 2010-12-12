@@ -34,7 +34,7 @@ class BooksField(TextField):
             return base64.encodestring(pickle.dumps(pickling_books, 2))
 
     def get_prep_value(self, value):
-        if value in ( False, None, '' ):
+        if value in ( False, None, '' ) or type(value) != 'list':
             return value
         else:
             pickling_books = [ x.fields for x in value ]

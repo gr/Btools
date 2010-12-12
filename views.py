@@ -5,10 +5,6 @@ from models import BookDB, BookSet
 from ZClient import ZClient
 from PyZ3950 import zoom, zmarc
 
-def render_template(request, **kwargs):
-    if kwargs['tpl']:
-        return render_to_response(kwargs['tpl']+'.html', locals())
-
 
 def query(request, **kwargs):
     if request.method == 'GET' and len(request.GET) > 0:

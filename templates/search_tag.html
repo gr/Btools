@@ -1,0 +1,9 @@
+{% load btags %}
+
+<h2>Search tag</h2>
+
+{% book_search 'bgu' '"ким"' 'CCL' 0 10 as bobo %}
+<h3>{{ bobo_len }}</h3>
+{% for book in bobo %}
+    {% book_render 'main' 'bgu' book '/debug' %}
+{% endfor %}
