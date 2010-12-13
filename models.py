@@ -19,32 +19,24 @@ class BooksField(TextField):
     
     def pre_save(self, model_instance, add):
         value = getattr(model_instance, self.attname, None)
-        if value in ( False, None, '' ):
-            return value
-        else:
-            pickling_books = [ x.fields for x in value ]
-            return base64.encodestring(pickle.dumps(pickling_books, 2))
+        return self.get_prep_value(value)
     
     def value_to_string(self, model_instance):
         value = getattr(model_instance, self.attname, None)
-        if value in ( False, None, '' ):
-            return value
-        else:
-            pickling_books = [ x.fields for x in value ]
-            return base64.encodestring(pickle.dumps(pickling_books, 2))
+        return self.get_prep_value(value)
 
     def get_prep_value(self, value):
-        if value in ( False, None, '' ) or type(value) != 'list':
+        if value in ( False, None, '' ) or not isinstance(value, list):
             return value
         else:
-            pickling_books = [ x.fields for x in value ]
+            pickling_books = [ (x.fields, x.encoding) for x in value ]
             return base64.encodestring(pickle.dumps(pickling_books, 2))
         
     def to_python(self, value):
         if not isinstance(value, basestring) or value in ( False, None, '' ):
             return value 
         books_fields = pickle.loads(base64.decodestring(value))
-        return [ Output( book_fields, 'utf-8') for book_fields in books_fields ]
+        return [ Output( book_fields, encoding) for (book_fields, encoding) in books_fields ]
 
 
 class BookDB(Model):
