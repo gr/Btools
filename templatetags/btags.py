@@ -5,7 +5,7 @@ from ..models import BookDB, BookSet
 register = template.Library()
 
 @register.inclusion_tag('tags/book.html')
-def book_render(mode, db_url, book_id, prefix = ''):
+def book_render(db_url, book_id, mode='main', prefix = ''):
     """
     Get book and render book info
     two input variables type
@@ -22,30 +22,35 @@ def book_render(mode, db_url, book_id, prefix = ''):
 
 
 @register.inclusion_tag('tags/bookset.html')
-def bookset_render(bookset_name, render_type, length): #name, type, len, pagination, from begin/end
+def bookset_render(bookset_name, mode='main', prefix='', lenght=0):
     """
     Render bookset
     """
     bookset = BookSet.objects.get(name = bookset_name)
     try:
-        length = int(length)
-        bookset.books = bookset.books[:length]
+        lenght = int(lenght)
+        if lenght > 0:
+            bookset.books = bookset.books[:lenght]
+        else:
+            bookset.books = bookset.books[lenght:]
     except:
         pass
-    return {'bookset': bookset}
+    return {'bookset': bookset, 'mode': mode, 'prefix': prefix}
     
 
 @register.inclusion_tag('tags/bookset_list.html')
-def bookset_list():
+def bookset_list(mode='main', prefix=''):
     """
     Render bookset list
     """
     booksets = BookSet.objects.filter(view_me=True)
-    return {'booksets': booksets}
+    return {'booksets': booksets, 'mode': mode, 'prefix': prefix}
+
 
 @register.tag
 def book_search(parser, token):
     return BookSearch(token)
+
 
 class BookSearch(template.Node):
     def __init__(self, argv):

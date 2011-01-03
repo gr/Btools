@@ -13,7 +13,7 @@
 		<p><span class="par-name">Length</span> {{b_len}}</p>
 		<ol>
 			{% for book in books %}<li>
-		      {% book_render db.url book '/debug' %}
+		      {% book_render db.url book 'mode' '/debug' %}
 			</li>{% endfor %}
 		</ol>
 

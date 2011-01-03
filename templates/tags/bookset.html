@@ -1,27 +1,20 @@
-<<<<<<< HEAD
-<p>
-    {{ bookset.name }} - {{ bookset.number_of_books }} книг
-</p>
-=======
 {% load btags %}
 
 {{ bookset.name }} - {{ bookset.number_of_books }} книг <br>
 
 {% for book in bookset.books %}
 
-    {% book_render bookset.db.url book.id %}<br>    
+    {% book_render bookset.db.url book mode prefix %}<br>    
     
 {% endfor %}
 
-
->>>>>>> 7bf221135ed528257f58689860f8a1e138b3db13
 
 {% comment %}
 
 рендер буксета
 
 пример вызова
-{% bookset_render '<bookset_name>' '<type>' '<lenght>' %}
+{% bookset_render '<bookset_name>' '<mode>' '<prefix>' '<lenght>' %}
 
 в шаблон передаются переменные
 bookset - набор книг имеет следующие поля

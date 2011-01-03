@@ -8,7 +8,7 @@
     {{ bookset.name }} - {{ bookset.number_of_books }} книг <br>
     
     {% for book in bookset.books %}
-        {% book_render 'main' bookset.db.url book '/debug' %}
+        {% book_render bookset.db.url book mode prefix %}
     {% endfor %}
     
 {% endfor %}
@@ -20,7 +20,7 @@
 рендер списка буксетов
 
 пример вызова
-{% bookset_list %}
+{% bookset_list '<mode>' '<prefix>' %}
 
 в шаблон передаются переменные
 booksets - массив буксетов

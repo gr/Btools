@@ -5,5 +5,19 @@
 {% book_search 'bgu' '"ким"' 'CCL' 0 10 as bobo %}
 <h3>{{ bobo_len }}</h3>
 {% for book in bobo %}
-    {% book_render 'main' 'bgu' book '/debug' %}
+    {% book_render 'bgu' book 'main' '/debug' %}
 {% endfor %}
+
+{% comment %}
+
+обязательные параметры: db.url, query
+не обязательные параметры - значение по умолчанию:
+query_type - PQF
+start, lenght - 0, 100 (всегда идут вместе)
+as <some var name> - book_render (можно задавать название массива куда прилетят результаты поиска)
+
+на выходе массив книг + <book_array_name>_len переменная в которой лежит количество найденных книг
+найтись может 2000 а в массив найденных попадут с 0 до 100
+2000 будет в <>_len переменной
+
+{% endcomment %}
