@@ -80,7 +80,7 @@ class BookSet(Model):
     view_me = BooleanField(u'Показывать на сайте', default=False)
     about = TextField(u'Описание набора книг, будет выводиться на сайте', blank=True)
     comment = TextField(u'Техническое описание набора книг, доступно только из админки', blank=True)
-    books = BooksField(editable=False)
+    books = BooksField(editable=False, null=True)
     
     def save(self):
         # crontab not support seconds
