@@ -1,45 +1,47 @@
 {% load btags %}
-
-{{ bookset.name }} - {{ bookset.number_of_books }} книг <br>
-
-{% for book in bookset.books %}
-
-    {% book_render bookset.db.url book mode prefix %}<br>    
-    
-{% endfor %}
-
-
+{% ifequal mode 'short' %}{# Для Новых поступлений на главной #}
+  <h2><a href="#{{ bookset.name }}">{{ bookset.name }}</a></h2>
+  <ul>{% for book in bookset.books|dictsortreversed:"id" %}
+    {% book_render bookset.db.url book mode prefix %}
+  {% endfor %}</ul>
+{% else %}{# Остальные #}
+  {{ bookset.name }} — {{ bookset.number_of_books }} книг <br>
+  {% for book in bookset.books %}
+    {% book_render bookset.db.url book mode prefix %}<br>       
+  {% endfor %}
+{% endifequal %}
 {% comment %}
 
-рендер буксета
+# Рендер буксета
 
-пример вызова
-{% bookset_render '<bookset_name>' '<mode>' '<prefix>' '<lenght>' %}
+## Пример вызова
 
-в шаблон передаются переменные
-bookset - набор книг имеет следующие поля
-каждый буксет имеет следующие поля
-    name
-    db 
-    query_type
-    query
-    time = Обновляется каждый день, в это время
-    number_of_books
-    last_time_update - Последний раз обновлялось
-    view_me - флаг пкоазывать или нет на сайте
-    about - Описание набора книг, будет выводиться на сайте
-    comment - Техническое описание набора книг, доступно только из админки
-    books - массив книг
+    {% bookset_render '<bookset_name>' '<mode>' '<prefix>' '<lenght>' %}
 
+## Передаваемые в шаблон переменные
 
-у db следующие поля
-    name = CharField(u'Название', max_length=50)
-    host = CharField(u'Хост', max_length=50)
-    port = IntegerField(u'Порт', default=210)
-    db = CharField(u'База данных', max_length=50)
-    syntax = CharField(u'Синтаксис', max_length=50, choices=SYNTAX_CHOICES)
-    encoding = CharField(u'Кодировка', max_length=50)
-    url = CharField(u'url', max_length=50)
-    about = TextField(u'Описание базы данных', blank=True)
+### `bookset` — набор книг имеет поля:
+
+    *   `name`
+    *   `db` — имеет подполя
+
+            name = CharField(u'Название', max_length=50)
+            host = CharField(u'Хост', max_length=50)
+            port = IntegerField(u'Порт', default=210)
+            db = CharField(u'База данных', max_length=50)
+            syntax = CharField(u'Синтаксис', max_length=50, choices=SYNTAX_CHOICES)
+            encoding = CharField(u'Кодировка', max_length=50)
+            url = CharField(u'url', max_length=50)
+            about = TextField(u'Описание базы данных', blank=True)
+
+    *   `query_type`
+    *   `query`
+    *   `time` — время ежедневного обновления
+    *   `number_of_books`
+    *   `last_time_update` — последний раз обновлялось
+    *   `view_me` — флаг показывать или нет на сайте
+    *   `about` — Описание набора книг, будет выводиться на сайте
+    *   `comment` — Техническое описание набора книг, доступно только из админки
+    *   `books` — массив книг
 
 {% endcomment %}
