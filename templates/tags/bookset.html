@@ -1,15 +1,20 @@
 {% load btags %}
 {% ifequal mode 'short' %}{# Для Новых поступлений на главной #}
-  <h2><a href="#{{ bookset.name }}">{{ bookset.name }}</a></h2>
+  <h2><a href="/Ресурсы/{{ bookset.name }}">{{ bookset.name }}</a></h2>
   <ul>{% for book in bookset.books|dictsortreversed:"id" %}
     {% book_render bookset.db.url book mode prefix %}
   {% endfor %}</ul>
+{% else %}{% ifequal mode 'long' %}{# Для вывода одного буксета #}
+  <h2 class="sauce_header item">{{ bookset.name }} <sup>{{ bookset.number_of_books }}<sup></h2>
+  <ol class="index-list">{% for book in bookset.books|dictsortreversed:"id" %}
+    <li>{% book_render bookset.db.url book mode prefix %}</li>{% endfor %}
+  </ol>
 {% else %}{# Остальные #}
   {{ bookset.name }} — {{ bookset.number_of_books }} книг <br>
   {% for book in bookset.books %}
     {% book_render bookset.db.url book mode prefix %}<br>       
   {% endfor %}
-{% endifequal %}
+{% endifequal %}{% endifequal %}
 {% comment %}
 
 # Рендер буксета

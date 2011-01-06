@@ -1,0 +1,5 @@
+{% load btags %}
+{% book_search 'bgu' '"иванов"' 'CCL' 0 100 as books %}
+{% for book in books %}<li>
+  {% book_render 'bgu' book 'main' %}
+</li>{% endfor %}

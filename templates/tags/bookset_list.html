@@ -2,7 +2,7 @@
 {% for bookset in booksets %}
   {% ifequal mode 'name&desc' %}{# Список наборов для Ресурсов #}
     <div class="post">
-      <h2 class="sauce_header"><a href="#{{ bookset.name }}">{{ bookset.name }}</a></h2>
+      <h2 class="sauce_header"><a href="{{ bookset.name }}">{{ bookset.name }}</a></h2>
       <p>{{ bookset.about }}</p>
     </div>
   {% else %}{# Остальные #}
