@@ -1,5 +1,5 @@
 {% load btags %}
-{% book_search 'bgu' '"иванов"' 'CCL' 0 100 as books %}
+{% book_search 'books' '"Иванов"' 'CCL' 100 100 as books %}
 {% for book in books %}<li>
-  {% book_render 'bgu' book 'main' %}
+  {% book_render 'books' book 'main' %}
 </li>{% endfor %}
