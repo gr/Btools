@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from ..models import BookDB, BookSet
+from ..helper import is_var, cut_array
 
 register = template.Library()
 
@@ -14,10 +15,7 @@ def book_render(db_url, book_id, mode='main', prefix = ''):
     if(book_id.__class__.__name__ == 'Output'):
         book = book_id
     else:
-        search = BookDB.objects.get(url=db_url).connect()
-        book = search.get_book(book_id)
-        if book:
-            book = book[0]
+        book = BookDB.objects.get(url=db_url).get_book(book_id)
     return {'mode': mode, 'prefix': prefix, 'book': book, 'db_url': db_url}
 
 
@@ -27,14 +25,7 @@ def bookset_render(bookset_name, mode='main', prefix='', lenght=0):
     Render bookset
     """
     bookset = BookSet.objects.get(name = bookset_name)
-    try:
-        lenght = int(lenght)
-        if lenght > 0:
-            bookset.books = bookset.books[:lenght]
-        else:
-            bookset.books = bookset.books[lenght:]
-    except:
-        pass
+    bookset.books = cut_array(bookset.books, lenght)
     return {'bookset': bookset, 'mode': mode, 'prefix': prefix}
     
 
@@ -66,8 +57,6 @@ class BookSearch(template.Node):
             argv = argv[:-2]
         else:
             name = 'book_search'
-            
-        is_var = lambda dict, key: dict[key] if dict.has_key(key) else key[1:-1]
         
         if len(argv) >=3:
             db = is_var(context, argv[1])
@@ -79,16 +68,22 @@ class BookSearch(template.Node):
             query_type = is_var(context, argv[3])
         else:
             query_type = 'PQF'
+        
+        books = BookDB.objects.get(url=db).query(query_type, query)
+        if isinstance(books, basestring):
+             result_len = 0
+        else:
+             result_len = len(books)
+
+        if len(argv) == 5:
+            lenght = is_var(context, argv[4])
+            books = cut_array(books, lenght)
             
         if len(argv) == 6:
-            start = int(argv[4])
-            lenght = int(argv[5])
-        else:
-            start = 0
-            lenght = 100
-        
+            start = is_var(context, argv[4])
+            lenght = is_var(context, argv[5])
+            books = books[start: start+lenght]
             
-        books = BookDB.objects.get(url=db).connect().query(query_type, query, start, lenght)
-        context[name] = books[0]
-        context[name+'_len'] = books[1]
+        context[name] = books
+        context[name+'_len'] = result_len
         return ''

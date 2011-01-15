@@ -2,7 +2,11 @@
 
 <h2>Search tag</h2>
 
-
+{% book_search 'bgu' '"иванов"' 'CCL' -2 as bobo %}
+  <h3>{{ bobo_len }}</h3>
+    {% for book in bobo %}
+      {% book_render 'bgu' book 'main' '/debug' %}
+    {% endfor %}
 
 {% comment %}
 

@@ -1,26 +1,61 @@
-﻿# -*def coding: utf-8 -*-
-from PyZ3950 import zoom, zmarc
-import cPickle
+# -*- coding: utf-8 -*-
+"""
+use in froms, models
+"""
+QUERY_TYPE_CHOICE = (('CCL', 'CCL'), 
+                      ('S-CCL','S-CCL'), 
+                      ('CQL','CQL'), 
+                      ('S-CQL','S-CQL'), 
+                      ('PQF','PQF'), 
+                      ('C2','C2'), 
+                      ('ZSQL','ZSQL'), 
+                      ('CQL-TREE','CQL-TREE'))
+"""
+use in froms, models
+"""                                            
+SYNTAX_CHOICE = (('RUSMARC', 'RUSMARC'), 
+                  ('USMARC', 'USMARC'), 
+                  ('USMARCnonstrict', 'USMARCnonstrict'), 
+                  ('UKMARC', 'UKMARC'), 
+                  ('SUTRS', 'SUTRS'), 
+                  ('XML', 'XML'),
+                  ('SGML', 'SGML'),
+                  ('GRS-1', 'GRS-1'),
+                  ('OPAC', 'OPAC'),
+                  ('EXPLAIN', 'EXPLAIN'))
 
-def rub_list(books=[]):
-    res=[]
-    for book in books:
-        if book.f675__a: res.append(('','udc',book.f675__a))
-        elif book.f686: res.append(('','bbc',book.f686__a))
-    return set(res)
+"""
+For extracting variables from Django template processor context
+use in btags
+"""
+def is_var(dict, key):
+    if dict.has_key(key):
+        return dict[key]
+    try:
+        return int(key)
+    except:
+        if key[0] == key[-1] and key[0] in ['\'','"']:
+            return key[1:-1]
+        else:
+            return key
 
+"""
+Get first or last N elements
+"""
+cut_array = lambda list, len: list[:int(len)] if int(len)>0 else list[int(len):]
+
+"""
+helper for book rendering
+initialize in models
+use in templates\btags\book.html
+"""
 class Output:
-    encoding='koi8-r'
-    fields=[]
-    _null=1
-
     def __init__(self, fields = None, encoding = ''):
         self.encoding = encoding
         self.fields = fields
 
     def __getattr__(self, name):
-        name = name[1:] 
-        field = name.split('__')
+        field = name[1:].split('__')
         try:
             if len(field) == 1:
                 return self.fields.get(int(field[0]),'')[0]
@@ -144,42 +179,3 @@ class Output:
 
     def link(self):
         return self.f856__u
-
-class ZClient:
-    connection = 0
-    response = []
-    encoding = 'koi8-r'
-    
-    def connect(self, host, port, db_name, syntax, encoding):
-        self.connection = 0
-        self.connection = zoom.Connection (host, port, databaseName=db_name, preferredRecordSyntax=syntax)
-        self.encoding = encoding
-
-    def set_db(self, db_name):
-        if self.connection <> 0:
-            self.connection.databaseName=db_name 
-
-    def set_syntax(self, syntax):
-        if self.connection <> 0:
-            self.connection.preferredRecordSyntax=syntax
-
-    def query(self, query_type, query, start=0, length=10):
-        res = []
-        query = zoom.Query(query_type, query.encode(self.encoding))
-        self.response = self.connection.search(query)
-        if len(self.response) < start: 
-            start=0
-        if len(self.response) < start+length:
-            length = len(self.response)
-        for i in xrange(start, start+length):
-            record = zmarc.MARC(MARC=self.response[i].data, strict = 0)
-            res.append(Output(record.fields, self.encoding))
-        return res, len(self.response)
-
-    def get_book(self, book_id):
-        query = '@attr 1=12 "'+book_id+'"'
-        return self.query('pqf',query)[0]
-
-    def get_books(self, keyword, start=0, length=10):
-        query = '@or @attr 1=7 "'+keyword+'"@attr 3=3 @attr 1=1035 "'+keyword+'"'
-        return self.query('pqf',query, start, length)
