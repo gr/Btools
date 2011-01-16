@@ -51,6 +51,7 @@ class BookDB(Model):
     encoding_out = CharField(u'Кодировка ответа', max_length=50)
     url = CharField(u'url', max_length=50)
     about = TextField(u'Описание базы данных', blank=True)
+    #id_prefix = TextField(u'id префикс', editable=False, null=True)
     
     def __unicode__(self):
         return self.name
@@ -59,6 +60,12 @@ class BookDB(Model):
         verbose_name = u'База данных'
         verbose_name_plural = u'Базы данных'
 
+    def save(self, *args, **kw):
+        book = self.query('PQF', '@attr 1=12 @attr 4=107 @attr 2=1 1000')[1]
+        id_prefix = '\\'.join(book.f001.split('\\')[:-1])
+        raise ERROR 
+        super(BookSet, self).save(*args, **kw)
+        
     """
     Return Z39.50 connection handle
     """        
@@ -75,7 +82,7 @@ class BookDB(Model):
     book is Output class 
     """     
     def query(self, query_type, query):
-        #try:
+        try:
             result = []
             connection = self.connect()
             query = zoom.Query(query_type, query.encode(self.encoding_in))
@@ -86,9 +93,9 @@ class BookDB(Model):
                 asd = raw_record.data
                 record = zmarc.MARC(MARC=raw_record.data, strict = 0)
                 result.append(Output(record.fields, self.encoding_out))
-        #except:
-        #    result = 'Connection error: DB is not reachable'
-            return result
+        except zoom.ConnectionError:
+            result = 'Connection error: DB is not reachable'
+        return result
 
     """
     Return book by id or 'Connection error: DB is not reachable' message
