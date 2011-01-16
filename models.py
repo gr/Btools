@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db.models import *
 from django.conf import settings
-from choice import QUERY_TYPE_CHOICE, SYNTAX_CHOICE
-from ZClient import ZClient, Output
+from helper import cut_array, Output, QUERY_TYPE_CHOICE, SYNTAX_CHOICE
+from PyZ3950 import zoom, zmarc
 from os import system
 import base64, codecs
 
@@ -57,17 +57,50 @@ class BookDB(Model):
     class Meta:
         verbose_name = u'База данных'
         verbose_name_plural = u'Базы данных'
-        
+
+    """
+    Return Z39.50 connection handle
+    """        
     def connect(self):
-         handle = ZClient()
-         handle.connect(self.host,
-                        self.port,
-                        self.db,
-                        self.syntax,
-                        self.encoding)
+         handle = zoom.Connection (host = self.host,
+                                   port = self.port,
+                                   databaseName = self.db,
+                                   preferredRecordSyntax = self.syntax)
          return handle
-   
-        
+    
+    """
+    Return array of books
+    or 'Connection error: DB is not reachable' message
+    book is Output class 
+    """     
+    def query(self, query_type, query):
+        try:
+            result = []
+            connection = self.connect()
+            query = zoom.Query(query_type, query.encode(self.encoding))
+            response = connection.search(query)
+            i = 0
+            for raw_record in response:
+                i += 1
+                asd = raw_record.data
+                record = zmarc.MARC(MARC=raw_record.data, strict = 0)
+                result.append(Output(record.fields, self.encoding))
+        except:
+            result = 'Connection error: DB is not reachable'
+        return result
+
+    """
+    Return book by id or 'Connection error: DB is not reachable' message
+    book is Output class
+    """
+    def get_book(self, book_id):
+        res = self.query('PQF', '@attr 1=12 "%s"' % book_id)
+        if isinstance(res, basestring) or len(res) == 0:
+            return res
+        else:
+            return res[0]
+
+
 class BookSet(Model):
     name = CharField(u'Название', max_length=50)
     db = ForeignKey(BookDB)
@@ -82,11 +115,11 @@ class BookSet(Model):
     comment = TextField(u'Техническое описание набора книг, доступно только из админки', blank=True)
     books = BooksField(editable=False, null=True)
     
-    def save(self):
+    def save(self, *args, **kw):
         # crontab not support seconds
         self.time = self.time.replace(self.time.hour, self.time.minute, 0)
         # update bset on save
-        self.bookset_update()
+        self.bookset_update(*args, **kw)
         # make crontab
         crontab = u'\n'.join(['%s %s * * * python %smanage.py bookset update \'%s\'' % (bset.time.minute, bset.time.hour, settings.PROJECT_ROOT, bset.name) for bset in BookSet.objects.all()])
         # crontab need end with null line
@@ -94,10 +127,12 @@ class BookSet(Model):
         # load crontab
         system('crontab %scrontab' % settings.PROJECT_ROOT)
 
-    def bookset_update(self):
-        search = self.db.connect()
-        self.books, self.number_of_books = search.query(query_type=self.query_type, query=self.query, length=self.max_books)
-        super(BookSet, self).save()
+    def bookset_update(self, *args, **kw):
+        books = self.db.query(query_type=self.query_type, query=self.query)
+        if not isinstance(books, basestring):
+            self.books = cut_array(books, self.max_books)
+            self.number_of_books = len(self.books)
+            super(BookSet, self).save(*args, **kw)
         
     def __unicode__(self):
         return self.name
