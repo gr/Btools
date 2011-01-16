@@ -47,7 +47,8 @@ class BookDB(Model):
     port = IntegerField(u'Порт', default=210)
     db = CharField(u'База данных', max_length=50)
     syntax = CharField(u'Синтаксис', max_length=50, choices=SYNTAX_CHOICE)
-    encoding = CharField(u'Кодировка', max_length=50)
+    encoding_in = CharField(u'Кодировка запроса', max_length=50)
+    encoding_out = CharField(u'Кодировка ответа', max_length=50)
     url = CharField(u'url', max_length=50)
     about = TextField(u'Описание базы данных', blank=True)
     
@@ -74,20 +75,20 @@ class BookDB(Model):
     book is Output class 
     """     
     def query(self, query_type, query):
-        try:
+        #try:
             result = []
             connection = self.connect()
-            query = zoom.Query(query_type, query.encode(self.encoding))
+            query = zoom.Query(query_type, query.encode(self.encoding_in))
             response = connection.search(query)
             i = 0
             for raw_record in response:
                 i += 1
                 asd = raw_record.data
                 record = zmarc.MARC(MARC=raw_record.data, strict = 0)
-                result.append(Output(record.fields, self.encoding))
-        except:
-            result = 'Connection error: DB is not reachable'
-        return result
+                result.append(Output(record.fields, self.encoding_out))
+        #except:
+        #    result = 'Connection error: DB is not reachable'
+            return result
 
     """
     Return book by id or 'Connection error: DB is not reachable' message

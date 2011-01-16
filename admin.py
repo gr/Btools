@@ -4,10 +4,10 @@ from models import BookDB, BookSet
 
 
 class BookDBAdmin(admin.ModelAdmin):
-    search_fields = ['name', 'host', 'port', 'db', 'encoding', 'about']
-    list_filter = ['name', 'host', 'port', 'db', 'encoding', 'about']
-    ordering = ['name', 'host', 'port', 'db', 'encoding', 'about']
-    list_display = ('name', 'host', 'port', 'db', 'encoding')
+    search_fields = ['name', 'host', 'port', 'db', 'encoding_in', 'about']
+    list_filter = ['name', 'host', 'port', 'db', 'encoding_in', 'about']
+    ordering = ['name', 'host', 'port', 'db', 'encoding_in', 'about']
+    list_display = ('name', 'host', 'port', 'db', 'encoding_in', 'encoding_out')
     
 class BookSetAdmin(admin.ModelAdmin):
     search_fields = ['name', 'query_type', 'query', 'about']

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from models import BookDB
-from choice import QUERY_TYPE_CHOICE, SYNTAX_CHOICE
+from helper import QUERY_TYPE_CHOICE, SYNTAX_CHOICE
 
 class QueryForm(forms.Form):
     db = forms.ModelChoiceField(
@@ -19,6 +19,9 @@ class QueryForm(forms.Form):
     query = forms.CharField(max_length=250, widget=forms.widgets.Textarea(attrs={'rows':'10', 'cols':'62'}),
         error_messages={'required':'Can\'t be blank', 
                         'max_length':'Max length is 250 symbols'})
-    charset = forms.CharField(max_length=250, 
+    charset_in = forms.CharField(max_length=50, 
+        error_messages={'required':'utf-8, koi8, etc.', 
+                        'max_length':'Max length is 250 symbols'})
+    charset_out = forms.CharField(max_length=50, 
         error_messages={'required':'utf-8, koi8, etc.', 
                         'max_length':'Max length is 250 symbols'})
