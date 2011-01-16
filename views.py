@@ -1,9 +1,21 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, get_object_or_404
-from forms import QueryForm
+from forms import QueryForm, SearchAjaxForm
 from models import BookDB, BookSet
 from PyZ3950 import zoom, zmarc
 
+
+def search_ajax(request, **kwargs):
+    if request.method == 'GET' and len(request.GET) > 0:
+        form = SearchAjaxForm(request.GET)
+        if form.is_valid():
+            db_url = form.cleaned_data['db_url']
+            query_type = form.cleaned_data['query_type']
+            query = form.cleaned_data['query']
+            start = form.cleaned_data['start']
+            lenght = form.cleaned_data['lenght']
+            ok = True
+    return render_to_response(kwargs['tpl'], locals())
 
 def query(request, **kwargs):
     if request.method == 'GET' and len(request.GET) > 0:

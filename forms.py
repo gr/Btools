@@ -25,3 +25,11 @@ class QueryForm(forms.Form):
     charset_out = forms.CharField(max_length=50, 
         error_messages={'required':'utf-8, koi8, etc.', 
                         'max_length':'Max length is 250 symbols'})
+                        
+                        
+class SearchAjaxForm(forms.Form):
+    db_url = forms.CharField(max_length=50)
+    query_type = forms.CharField(max_length=10)
+    query = forms.CharField(max_length=250)
+    start = forms.IntegerField(min_value=0)
+    lenght = forms.IntegerField(min_value=0, max_value=100)                   
